@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.mycomany</groupId>
+		<artifactId>bank-portal-system</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+
+	<artifactId>bank-contract</artifactId>
+	<packaging>jar</packaging>
+	<name>Bank Contract</name>
+	<description>OpenAPI specification and generated model classes</description>
+
+	<properties>
+		<swagger-annotations.version>2.2.28</swagger-annotations.version>
+		<jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.swagger.core.v3</groupId>
+			<artifactId>swagger-annotations</artifactId>
+			<version>${swagger-annotations.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>jakarta.annotation</groupId>
+			<artifactId>jakarta.annotation-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.openapitools</groupId>
+			<artifactId>jackson-databind-nullable</artifactId>
+			<version>${jackson-databind-nullable.version}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.openapitools</groupId>
+				<artifactId>openapi-generator-maven-plugin</artifactId>
+				<version>${openapi-generator-maven-plugin.version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>${project.basedir}/src/main/resources/contracts/bank-etrasfer-openapi.yaml</inputSpec>
+							<generatorName>java</generatorName>
+							<library>native</library>
+							<generateApis>false</generateApis>
+							<!-- Models reference ApiClient/JSON helpers from this library; include supporting sources -->
+							<generateSupportingFiles>true</generateSupportingFiles>
+							<modelPackage>com.mycomany.bank.contract.model</modelPackage>
+							<invokerPackage>com.mycomany.bank.contract.invoker</invokerPackage>
+							<generateModelTests>false</generateModelTests>
+							<generateApiTests>false</generateApiTests>
+							<configOptions>
+								<serializableModel>true</serializableModel>
+								<useJakartaEe>true</useJakartaEe>
+							</configOptions>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>
