@@ -1,0 +1,73 @@
+openapi: 3.0.3
+info:
+  title: Bank E-Transfer API
+  version: 1.0.0
+paths:
+  /transfers:
+    post:
+      summary: Execute a new e-transfer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferRequest'
+      responses:
+        '201':
+          description: Transfer successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransferResponse'
+              # This provides a mock response in Swagger UI
+              example:
+                transactionId: "ETR-20260507-IJN06"
+                amount: 99.00
+                currency: "CAD"
+                toName: "Marcus Rivera"
+                sentDate: "2026-05-07T16:29:32Z"
+                fromAccount: "Everyday Chequing ****4821"
+                userMessage: "test sending"
+
+components:
+  schemas:
+    TransferRequest:
+      type: object
+      required: [amount, recipientId, accountId]
+      properties:
+        amount:
+          type: number
+          format: double
+          example: 99.00
+        currency:
+          type: string
+          example: "CAD"
+        recipientId:
+          type: string
+          example: "rec-mrivera-001"
+        accountId:
+          type: string
+          example: "acc-everyday-4821"
+        userMessage:
+          type: string
+          example: "test sending"
+
+    TransferResponse:
+      type: object
+      properties:
+        transactionId:
+          type: string
+        amount:
+          type: number
+          format: double
+        currency:
+          type: string
+        toName:
+          type: string
+        sentDate:
+          type: string
+          format: date-time
+        fromAccount:
+          type: string
+        userMessage:
+          type: string
