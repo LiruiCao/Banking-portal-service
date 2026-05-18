@@ -1,6 +1,6 @@
 package com.mycomany.bankingservice.payment.controller;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -40,7 +40,7 @@ class ETransferControllerTest {
                 .fromAccount("Everyday Chequing ****4821")
                 .userMessage("test sending");
 
-        when(eTransferService.processTransfer(any(TransferRequest.class))).thenReturn(mockResponse);
+        when(eTransferService.processTransfer(any(TransferRequest.class),anyString())).thenReturn(mockResponse);
 
         String requestJson = """
                 {
@@ -51,8 +51,9 @@ class ETransferControllerTest {
                   "userMessage": "test sending"
                 }
                 """;
-
+        String mockedIdempotencyKey = "550e8400-e29b-41d4-a716-446655440000";
         mockMvc.perform(post("/api/v1/etransfer/execute")
+                        .header("idempotencyKey", mockedIdempotencyKey)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isCreated())
@@ -63,6 +64,6 @@ class ETransferControllerTest {
                 .andExpect(jsonPath("$.fromAccount").value("Everyday Chequing ****4821"))
                 .andExpect(jsonPath("$.userMessage").value("test sending"));
 
-        verify(eTransferService).processTransfer(any(TransferRequest.class));
+        verify(eTransferService).processTransfer(any(TransferRequest.class),eq(mockedIdempotencyKey));
     }
 }

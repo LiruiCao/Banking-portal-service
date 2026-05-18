@@ -6,6 +6,17 @@ paths:
   /transfers:
     post:
       summary: Execute a new e-transfer
+      parameters:
+        - name: idempotencyKey
+          in: header
+          required: true
+          description: The idempotency key for the transfer
+
+          schema:
+            type: string
+            minLength:1
+            maxLength: 255
+            example: "123e4567-e89b-12d3-a456-426614174000"
       requestBody:
         required: true
         content:

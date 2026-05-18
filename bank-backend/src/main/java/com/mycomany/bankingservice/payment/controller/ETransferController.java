@@ -2,10 +2,7 @@ package com.mycomany.bankingservice.payment.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.mycomany.bank.contract.model.TransferRequest;
 import com.mycomany.bank.contract.model.TransferResponse;
@@ -23,8 +20,9 @@ public class ETransferController {
 
     //endpoint to execute the e-transfer
     @PostMapping("/execute")
-    public ResponseEntity<TransferResponse> submitTransfer(@RequestBody TransferRequest request) {
-        TransferResponse response = eTransferService.processTransfer(request);
+    public ResponseEntity<TransferResponse> submitTransfer(@RequestBody TransferRequest request
+    , @RequestHeader("idempotencyKey") String idempotencyKey) {
+        TransferResponse response = eTransferService.processTransfer(request,idempotencyKey);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }
